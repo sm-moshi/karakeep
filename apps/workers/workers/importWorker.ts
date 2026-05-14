@@ -660,7 +660,7 @@ export class ImportWorker {
           eq(importStagingBookmarks.status, "processing"),
           sql`${importStagingBookmarks.processingStartedAt} > ${new Date(
             Date.now() - this.staleThresholdMs,
-          )}`,
+          ).toISOString()}::timestamp`,
         ),
       );
 
@@ -686,7 +686,7 @@ export class ImportWorker {
       .where(
         and(
           eq(importStagingBookmarks.status, "processing"),
-          sql`${importStagingBookmarks.processingStartedAt} < ${staleThreshold}`,
+          sql`${importStagingBookmarks.processingStartedAt} < ${staleThreshold.toISOString()}::timestamp`,
           // Only reset items that haven't created a bookmark yet
           // Items with a bookmark are waiting for downstream, not stale
           isNull(importStagingBookmarks.resultBookmarkId),
