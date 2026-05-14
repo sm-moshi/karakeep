@@ -170,7 +170,14 @@ COPY --from=base --chown=node:node /app/apps/web/.next/static ./apps/web/.next/s
 ######################
 # Prepare the workers app
 ######################
-COPY --from=base /prod/workers /app/apps/workers
+COPY --from=base --chown=node:node /prod/workers /app/apps/workers
+
+# The root cluster enforces restricted PodSecurity. s6-overlay can run as a
+# non-root UID, but its preinit checks require /run to be owned by that UID.
+RUN mkdir -p /run /data \
+    && chown -R node:node /run /data /app /db_migrations
+
+USER node
 
 ENTRYPOINT ["/init"]
 
