@@ -177,8 +177,6 @@ COPY --from=base --chown=node:node /prod/workers /app/apps/workers
 RUN mkdir -p /run /data \
     && chown -R node:node /run /data /app /db_migrations
 
-USER node
-
 ENTRYPOINT ["/init"]
 
 ################# The AIO ##############
@@ -189,6 +187,8 @@ RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/init-db-migration \
     /etc/s6-overlay/s6-rc.d/user/contents.d/svc-web \
     /etc/s6-overlay/s6-rc.d/user/contents.d/svc-workers
 
+USER node
+
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health || exit 1
 
 ################# The web container ##############
@@ -198,6 +198,7 @@ FROM aio_builder AS web
 RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/init-db-migration \
     /etc/s6-overlay/s6-rc.d/user/contents.d/svc-web
 ENV USING_LEGACY_SEPARATE_CONTAINERS=true
+USER node
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health || exit 1
 
@@ -210,6 +211,7 @@ FROM aio_builder AS workers
 RUN rm /etc/s6-overlay/s6-rc.d/svc-workers/dependencies.d/init-db-migration \
     && touch /etc/s6-overlay/s6-rc.d/user/contents.d/svc-workers
 ENV USING_LEGACY_SEPARATE_CONTAINERS=true
+USER node
 
 ################# The cli ##############
 
