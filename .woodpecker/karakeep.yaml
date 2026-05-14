@@ -1,9 +1,8 @@
 # Karakeep fork image.
 # Pushes the all-in-one runtime to: ghcr.io/sm-moshi/karakeep
 when:
-  - event: manual
-  - event: push
-    branch: main
+  - evaluate: 'CI_REPO == "m0sh1/karakeep" && CI_PIPELINE_EVENT == "manual"'
+  - evaluate: 'CI_REPO == "m0sh1/karakeep" && CI_PIPELINE_EVENT == "push" && CI_COMMIT_BRANCH == "main"'
 
 steps:
   - name: build-and-push-ghcr
