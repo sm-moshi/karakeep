@@ -66,13 +66,14 @@ RUN (cd apps/web && pnpm exec next build --experimental-build-mode compile)
 
 # Build the worker code
 RUN (cd apps/workers && pnpm build)
-RUN pnpm deploy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers
 
 # Build the cli
 RUN (cd apps/cli && pnpm build)
 
 # Build the mcp server
 RUN (cd apps/mcp && pnpm build)
+
+RUN pnpm deploy --legacy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers
 
 ################# The All-in-one builder ##############
 
