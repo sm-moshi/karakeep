@@ -62,18 +62,18 @@ RUN cd packages/db && \
 
 
 # Compile the web app
-RUN (cd apps/web && pnpm exec next build --experimental-build-mode compile)
+RUN (cd apps/web && /app/node_modules/.bin/next build --experimental-build-mode compile)
 
 # Build the worker code
-RUN (cd apps/workers && pnpm build)
+RUN (cd apps/workers && /app/node_modules/.bin/tsdown)
 
 # Build the cli
-RUN (cd apps/cli && pnpm build)
+RUN (cd apps/cli && /app/node_modules/.bin/vite build && chmod +x dist/index.mjs)
 
 # Build the mcp server
-RUN (cd apps/mcp && pnpm build)
+RUN (cd apps/mcp && /app/node_modules/.bin/vite build && /app/node_modules/.bin/shx chmod +x dist/index.js)
 
-RUN pnpm deploy --legacy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers
+RUN pnpm --offline deploy --legacy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers
 
 ################# The All-in-one builder ##############
 
