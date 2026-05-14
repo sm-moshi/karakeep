@@ -57,7 +57,7 @@ COPY . .
 
 # Build the db migration script
 RUN cd packages/db && \
-    ./node_modules/.bin/ncc build migrate.ts -o /db_migrations && \
+    /app/node_modules/.bin/ncc build migrate.ts -o /db_migrations && \
     cp -R drizzle drizzle-pg /db_migrations
 
 
