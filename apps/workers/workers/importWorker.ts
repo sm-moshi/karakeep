@@ -9,6 +9,7 @@ import {
   isNull,
   lt,
   or,
+  sql,
 } from "drizzle-orm";
 import { Counter, Gauge, Histogram } from "prom-client";
 import { buildImpersonatingTRPCClient } from "trpc";
@@ -659,10 +660,9 @@ export class ImportWorker {
       .where(
         and(
           eq(importStagingBookmarks.status, "processing"),
-          gt(
-            importStagingBookmarks.processingStartedAt,
-            new Date(Date.now() - this.staleThresholdMs),
-          ),
+          sql`${importStagingBookmarks.processingStartedAt} > ${new Date(
+            Date.now() - this.staleThresholdMs,
+          )}`,
         ),
       );
 
@@ -688,7 +688,7 @@ export class ImportWorker {
       .where(
         and(
           eq(importStagingBookmarks.status, "processing"),
-          lt(importStagingBookmarks.processingStartedAt, staleThreshold),
+          sql`${importStagingBookmarks.processingStartedAt} < ${staleThreshold}`,
           // Only reset items that haven't created a bookmark yet
           // Items with a bookmark are waiting for downstream, not stale
           isNull(importStagingBookmarks.resultBookmarkId),
