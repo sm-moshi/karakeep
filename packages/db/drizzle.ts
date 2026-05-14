@@ -4,12 +4,15 @@ import path from "path";
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { migrate } from "drizzle-orm/better-sqlite3/migrator";
+import { drizzle as drizzlePostgres } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
 import serverConfig from "@karakeep/shared/config";
 
 import dbConfig from "./drizzle.config";
 import { instrumentDatabase } from "./instrumentation";
 import * as schema from "./schema";
+import * as pgSchema from "./schema.pg";
 
 function createSqliteDatabase() {
   const sqlite = new Database(dbConfig.dbCredentials.url);
@@ -29,11 +32,20 @@ function createSqliteDatabase() {
   return drizzle(sqlite, { schema });
 }
 
+function createPostgresDatabase() {
+  const sql = postgres(serverConfig.database.url!, {
+    max: 10,
+    prepare: false,
+  });
+
+  return drizzlePostgres(sql, { schema: pgSchema });
+}
+
 function createDatabase() {
   if (serverConfig.database.driver === "postgres") {
-    throw new Error(
-      "DB_DRIVER=postgres is configured, but the Postgres schema and migrations are not implemented yet.",
-    );
+    return createPostgresDatabase() as unknown as ReturnType<
+      typeof createSqliteDatabase
+    >;
   }
 
   return createSqliteDatabase();
