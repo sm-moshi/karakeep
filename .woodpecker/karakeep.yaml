@@ -7,7 +7,7 @@ when:
 
 steps:
   - name: build-and-push-ghcr
-    image: gcr.io/kaniko-project/executor:v1.24.0-debug@sha256:c6d6ff561634f9338e7f9734a5b8c5ddf1ccfe3326124f54f899bff70d2dc4d5
+    image: gcr.io/kaniko-project/executor:v1.24.0-debug@sha256:2562c4fe551399514277ffff7dcca9a3b1628c4ea38cb017d7286dc6ea52f4cd
     environment:
       GHCR_TOKEN:
         from_secret: github_token
