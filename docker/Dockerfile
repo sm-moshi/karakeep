@@ -243,7 +243,7 @@ COPY --from=base --chown=node:node /prod/workers /app/apps/workers
 # The root cluster enforces restricted PodSecurity. s6-overlay can run as a
 # non-root UID, but its preinit checks require /run to be owned by that UID.
 RUN mkdir -p /run /data \
-    && chown -R node:node /run /data /app /db_migrations
+    && chown node:node /run /data
 
 ENTRYPOINT ["/init"]
 
@@ -277,7 +277,7 @@ COPY --from=base_postgres --chown=node:node /prod/workers /app/apps/workers
 RUN node -e "try { require.resolve('better-sqlite3'); process.exit(1); } catch { process.exit(0); }"
 
 RUN mkdir -p /run /data \
-    && chown -R node:node /run /data /app /db_migrations
+    && chown node:node /run /data
 
 ENTRYPOINT ["/init"]
 
