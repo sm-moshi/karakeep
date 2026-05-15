@@ -2,14 +2,34 @@
 # Pushes the all-in-one runtime to: ghcr.io/sm-moshi/karakeep
 when:
   - event: manual
+  - event: pull_request
   - event: push
     branch: main
 
 steps:
+  - name: preflight
+    when:
+      - event: manual
+      - event: pull_request
+      - event: push
+        branch: main
+    image: dhi.io/node:24.15.0-debian13-dev@sha256:bb3cc390be776ca02e6c155cba987b610f8755d561fc42261622f7a2d04c9a22
+    environment:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    commands:
+      - apt-get update
+      - apt-get install --no-install-recommends -y make g++ python3 python3-pip
+      - rm -rf /var/lib/apt/lists/*
+      - npm install -g corepack@0.31.0
+      - corepack enable
+      - pnpm install --frozen-lockfile --config.package-import-method=copy
+      - pnpm preflight
+
   - name: build-and-push-ghcr
     when:
       - event: manual
       - event: push
+        branch: main
     image: woodpeckerci/plugin-docker-buildx:6.1.0@sha256:33263f74a593ddef5d4faeb39ae9f87db14d64d8aae8186284ae6e90d89298a4
     privileged: true
     settings:
@@ -35,6 +55,7 @@ steps:
     when:
       - event: manual
       - event: push
+        branch: main
     failure: ignore
     image: dhi.io/trivy:0.70.0-alpine3.23-dev@sha256:18f9194e75e1ba136f9415fffa3246187aca13698a52ab5baf188ec6d3813666
     environment:
@@ -47,6 +68,7 @@ steps:
     when:
       - event: manual
       - event: push
+        branch: main
     failure: ignore
     image: dhi.io/syft:1.44.0-alpine3.23-dev@sha256:5827400e1f8401e8b925687aa38624ada774b5480153ddbe342815a68559b8ef
     environment:
