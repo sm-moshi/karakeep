@@ -17,9 +17,11 @@ steps:
     environment:
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
       PNPM_STORE_DIR: /pnpm/store
-      TURBO_CACHE_DIR: /woodpecker/cache/karakeep/turbo
+      TURBO_CACHE_DIR: /tmp/karakeep-turbo
     commands:
-      - mkdir -p "$TURBO_CACHE_DIR"
+      - mkdir -p /tmp/karakeep-ci "$TURBO_CACHE_DIR"
+      - tar --exclude=.git --exclude=node_modules --exclude=.turbo -cf - . | tar -C /tmp/karakeep-ci -xf -
+      - cd /tmp/karakeep-ci
       - pnpm config set store-dir "$PNPM_STORE_DIR"
       - pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
       - pnpm preflight
