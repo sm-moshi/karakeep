@@ -6,12 +6,17 @@ import { createPostgresDatabase } from "./postgres-runtime";
 
 type SqliteDB = ReturnType<typeof import("./sqlite").createSqliteDatabase>;
 
+const importSqliteRuntime = (specifier: string) =>
+  new Function("specifier", "return import(specifier)")(specifier) as Promise<
+    typeof import("./sqlite")
+  >;
+
 async function createDatabase(): Promise<SqliteDB> {
   if (serverConfig.database.driver === "postgres") {
     return createPostgresDatabase() as unknown as SqliteDB;
   }
 
-  const { createSqliteDatabase } = await import("./sqlite");
+  const { createSqliteDatabase } = await importSqliteRuntime("./sqlite");
   return createSqliteDatabase();
 }
 

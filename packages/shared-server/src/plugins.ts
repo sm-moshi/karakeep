@@ -2,6 +2,11 @@ import { PluginManager } from "@karakeep/shared/plugins";
 import serverConfig from "@karakeep/shared/config";
 
 let pluginsLoaded = false;
+const importPluginRuntime = (specifier: string) =>
+  new Function("specifier", "return import(specifier)")(
+    specifier,
+  ) as Promise<unknown>;
+
 export async function loadAllPlugins() {
   if (pluginsLoaded) {
     return;
@@ -11,7 +16,7 @@ export async function loadAllPlugins() {
   if (serverConfig.database.driver === "postgres") {
     await import("@karakeep/plugins/queue-postgres");
   } else {
-    await import("@karakeep/plugins/queue-liteque");
+    await importPluginRuntime("@karakeep/plugins/queue-liteque");
   }
   await import("@karakeep/plugins/queue-restate");
   await import("@karakeep/plugins/search-meilisearch");

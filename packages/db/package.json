@@ -21,12 +21,14 @@
     "@karakeep/shared": "workspace:*",
     "@opentelemetry/api": "^1.9.1",
     "@paralleldrive/cuid2": "^2.3.1",
-    "better-sqlite3": "^11.10.0",
     "dotenv": "^16.6.1",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
     "postgres": "^3.4.9",
     "tsx": "^4.21.0"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^11.10.0"
   },
   "devDependencies": {
     "@karakeep/tsconfig": "workspace:^0.1.0",

@@ -78,9 +78,70 @@ RUN (cd apps/mcp && /app/node_modules/.bin/vite build && /app/node_modules/.bin/
 
 RUN pnpm --prefer-offline deploy --legacy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers
 
+################# Postgres-only Base Builder ##############
+FROM dhi.io/node:${DHI_NODE_VERSION}-debian13-dev AS base_postgres
+
+WORKDIR /app
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+# https://github.com/karakeep-app/karakeep/issues/967
+RUN npm install -g corepack@0.31.0 && corepack enable
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+        make \
+        g++ \
+        python3 \
+        python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy package files for dependency installation
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY apps/cli/package.json ./apps/cli/
+COPY apps/mcp/package.json ./apps/mcp/
+COPY apps/web/package.json ./apps/web/
+COPY apps/workers/package.json ./apps/workers/
+COPY packages/api/package.json ./packages/api/
+COPY packages/db/package.json ./packages/db/
+COPY packages/open-api/package.json ./packages/open-api/
+COPY packages/plugins/package.json ./packages/plugins/
+COPY packages/sdk/package.json ./packages/sdk/
+COPY packages/shared-react/package.json ./packages/shared-react/
+COPY packages/shared-server/package.json ./packages/shared-server/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/trpc/package.json ./packages/trpc/
+COPY tooling/github/package.json ./tooling/github/
+COPY tooling/oxlint/package.json ./tooling/oxlint/
+COPY tooling/prettier/package.json ./tooling/prettier/
+COPY tooling/tailwind/package.json ./tooling/tailwind/
+COPY tooling/typescript/package.json ./tooling/typescript/
+COPY ./patches ./patches
+
+RUN node -e "const fs=require('node:fs'); const edits=[['packages/db/package.json','better-sqlite3'],['packages/plugins/package.json','liteque']]; for (const [file, dep] of edits) { const pkg=JSON.parse(fs.readFileSync(file,'utf8')); if (pkg.optionalDependencies) { delete pkg.optionalDependencies[dep]; if (Object.keys(pkg.optionalDependencies).length === 0) delete pkg.optionalDependencies; } fs.writeFileSync(file, JSON.stringify(pkg, null, 2) + '\n'); }"
+
+ENV DB_DRIVER=postgres
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+# Postgres-only images must not install native SQLite dependencies.
+RUN pnpm install --no-frozen-lockfile --config.package-import-method=copy
+RUN node -e "try { require.resolve('better-sqlite3'); process.exit(1); } catch { process.exit(0); }"
+
+COPY . .
+RUN node -e "const fs=require('node:fs'); const edits=[['packages/db/package.json','better-sqlite3'],['packages/plugins/package.json','liteque']]; for (const [file, dep] of edits) { const pkg=JSON.parse(fs.readFileSync(file,'utf8')); if (pkg.optionalDependencies) { delete pkg.optionalDependencies[dep]; if (Object.keys(pkg.optionalDependencies).length === 0) delete pkg.optionalDependencies; } fs.writeFileSync(file, JSON.stringify(pkg, null, 2) + '\n'); }"
+
+# Build a migration script that cannot import the SQLite runtime.
+RUN cd packages/db && \
+    /app/node_modules/.bin/ncc build migrate-postgres.ts -o /db_migrations && \
+    cp -R drizzle-pg /db_migrations
+
+RUN (cd apps/web && CIRCLE_NODE_TOTAL=2 /app/node_modules/.bin/next build --experimental-build-mode compile)
+RUN (cd apps/workers && /app/node_modules/.bin/tsdown)
+RUN pnpm --prefer-offline deploy --legacy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers
+
 ################# The All-in-one builder ##############
 
-FROM dhi.io/node:${DHI_NODE_VERSION}-debian13-dev AS aio_builder
+FROM dhi.io/node:${DHI_NODE_VERSION}-debian13-dev AS aio_runtime
 LABEL org.opencontainers.image.source="https://github.com/karakeep-app/karakeep"
 WORKDIR /app
 
@@ -148,6 +209,8 @@ COPY --from=monolith_builder /usr/local/cargo/bin/monolith /usr/local/bin/monoli
 # Prepare the web app
 ######################
 
+FROM aio_runtime AS aio_builder
+
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXTAUTH_URL_INTERNAL=http://localhost:${PORT}
@@ -184,9 +247,55 @@ RUN mkdir -p /run /data \
 
 ENTRYPOINT ["/init"]
 
+################# The Postgres-only all-in-one builder ##############
+
+FROM aio_runtime AS aio_postgres_builder
+
+ENV DB_DRIVER=postgres
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXTAUTH_URL_INTERNAL=http://localhost:${PORT}
+
+ARG TARGETARCH
+RUN mkdir -p /usr/local/lib \
+    && if [ "$TARGETARCH" = "arm64" ]; then \
+        ln -s /usr/lib/aarch64-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so; \
+    else \
+        ln -s /usr/lib/x86_64-linux-gnu/libjemalloc.so.2 /usr/local/lib/libjemalloc.so; \
+    fi
+
+COPY --from=base_postgres --chown=node:node /app/apps/web/.next/standalone ./
+COPY --from=base_postgres /app/apps/web/public ./apps/web/public
+COPY --from=base_postgres /db_migrations /db_migrations
+RUN test ! -d /db_migrations/drizzle
+
+RUN mkdir -p ./apps/web/.next && chown node:node ./apps/web/.next
+
+COPY --from=base_postgres --chown=node:node /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=base_postgres --chown=node:node /prod/workers /app/apps/workers
+
+RUN node -e "try { require.resolve('better-sqlite3'); process.exit(1); } catch { process.exit(0); }"
+
+RUN mkdir -p /run /data \
+    && chown -R node:node /run /data /app /db_migrations
+
+ENTRYPOINT ["/init"]
+
 ################# The AIO ##############
 
 FROM aio_builder AS aio
+
+RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/init-db-migration \
+    /etc/s6-overlay/s6-rc.d/user/contents.d/svc-web \
+    /etc/s6-overlay/s6-rc.d/user/contents.d/svc-workers
+
+USER node
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health || exit 1
+
+################# The Postgres-only AIO ##############
+
+FROM aio_postgres_builder AS aio-postgres
 
 RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/init-db-migration \
     /etc/s6-overlay/s6-rc.d/user/contents.d/svc-web \
