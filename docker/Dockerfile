@@ -63,8 +63,9 @@ RUN cd packages/db && \
     cp -R drizzle drizzle-pg /db_migrations
 
 
-# Compile the web app
-RUN (cd apps/web && /app/node_modules/.bin/next build --experimental-build-mode compile)
+# Compile the web app. Next derives its worker count from CIRCLE_NODE_TOTAL;
+# cap it here to keep local and CI Docker builds inside modest memory limits.
+RUN (cd apps/web && CIRCLE_NODE_TOTAL=2 /app/node_modules/.bin/next build --experimental-build-mode compile)
 
 # Build the worker code
 RUN (cd apps/workers && /app/node_modules/.bin/tsdown)
