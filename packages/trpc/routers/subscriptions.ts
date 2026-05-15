@@ -24,7 +24,8 @@ const stripe = serverConfig.stripe.secretKey
     })
   : null;
 
-type StripeEvent = ReturnType<Stripe["webhooks"]["constructEvent"]>;
+type StripeClient = NonNullable<typeof stripe>;
+type StripeEvent = ReturnType<StripeClient["webhooks"]["constructEvent"]>;
 
 function requireStripeConfig() {
   if (!stripe || !serverConfig.stripe.priceId) {
@@ -418,9 +419,7 @@ export const subscriptionsRouter = router({
         }
       }
 
-      const sessionParams: Stripe.Checkout.SessionCreateParams & {
-        managed_payments?: { enabled: boolean };
-      } = {
+      const sessionParams = {
         customer: customerId,
         line_items: [
           {
@@ -428,14 +427,14 @@ export const subscriptionsRouter = router({
             quantity: 1,
           },
         ],
-        mode: "subscription",
+        mode: "subscription" as const,
         success_url: `${serverConfig.publicUrl}/settings/subscription?success=true`,
         cancel_url: `${serverConfig.publicUrl}/settings/subscription?canceled=true`,
         metadata: {
           userId: ctx.user.id,
         },
         customer_update: {
-          address: "auto",
+          address: "auto" as const,
         },
         allow_promotion_codes: true,
         managed_payments: {
