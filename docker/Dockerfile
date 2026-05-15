@@ -126,6 +126,7 @@ RUN apt-get update \
         curl \
         graphicsmagick \
         ghostscript \
+        init-system-helpers \
         libjemalloc2 \
         ffmpeg \
     && rm -rf /var/lib/apt/lists/*
