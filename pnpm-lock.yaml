@@ -299,7 +299,7 @@ importers:
         version: link:../../tooling/typescript
       '@tailwindcss/typography':
         specifier: ^0.5.10
-        version: 0.5.16(tailwindcss@3.4.1)
+        version: 0.5.19(tailwindcss@3.4.1)
       '@types/react':
         specifier: ^19.2.14
         version: 19.2.14
@@ -1622,7 +1622,7 @@ importers:
     dependencies:
       '@tailwindcss/typography':
         specifier: ^0.5.10
-        version: 0.5.16(tailwindcss@3.4.1)
+        version: 0.5.19(tailwindcss@3.4.1)
       nativewind:
         specifier: ^4.2.1
         version: 4.2.1(react-native-reanimated@4.2.1(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3))(react@19.2.3)(tailwindcss@3.4.1)
@@ -7223,8 +7223,8 @@ packages:
     resolution: {integrity: sha512-+PmQX0PiAYPMeVYe237LJAYvOMYW1j2rH5YROyS3b4CTVJum34HfRvKvAzozHAQG0TnHNdUfY9nCeUyRAs//cw==}
     engines: {node: '>=14.16'}
 
-  '@tailwindcss/typography@0.5.16':
-    resolution: {integrity: sha512-0wDLwCVF5V3x3b1SGXPCDcdsbDHMBe+lkFzBRaHeLvNi+nrrnZ1lA18u+OTWO8iSWU2GxUOCvlXtDuqftc1oiA==}
+  '@tailwindcss/typography@0.5.19':
+    resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1'
 
@@ -11845,20 +11845,11 @@ packages:
     resolution: {integrity: sha512-gvVijfZvn7R+2qyPX8mAuKcFGDf6Nc61GdvGafQsHL0sBIxfKzA+usWn4GFC/bk+QdwPUD4kWFJLhElipq+0VA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  lodash.castarray@4.4.0:
-    resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
-
   lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
 
-  lodash.isplainobject@4.0.6:
-    resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
-
   lodash.memoize@4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
-
-  lodash.merge@4.6.2:
-    resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
   lodash.sortby@4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
@@ -13871,8 +13862,8 @@ packages:
     resolution: {integrity: sha512-Q8qQfPiZ+THO/3ZrOrO0cJJKfpYCagtMUkXbnEfmgUjwXg6z/WBeOyS9APBBPCTSiDV+s4SwQGu8yFsiMRIudg==}
     engines: {node: '>=4'}
 
-  postcss-selector-parser@7.1.0:
-    resolution: {integrity: sha512-8sLjZwK0R+JlxlYcTuVnyT2v+htpdrjDOKuMcOVdYjt52Lh8hWRYpxBPoKx/Zg+bcjc3wx6fmQevMmUztS/ccA==}
+  postcss-selector-parser@7.1.1:
+    resolution: {integrity: sha512-orRsuYpJVw8LdAwqqLykBj9ecS5/cRHlI5+nvTo8LcCKmzDmqVORXtOIYEEQuL9D4BxtA1lm5isAqzQZCoQ6Eg==}
     engines: {node: '>=4'}
 
   postcss-sort-media-queries@5.2.0:
@@ -19827,9 +19818,9 @@ snapshots:
 
   '@csstools/postcss-cascade-layers@5.0.1(postcss@8.5.10)':
     dependencies:
-      '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.0)
+      '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.1)
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   '@csstools/postcss-color-function@4.0.10(postcss@8.5.10)':
     dependencies:
@@ -19917,9 +19908,9 @@ snapshots:
 
   '@csstools/postcss-is-pseudo-class@5.0.1(postcss@8.5.10)':
     dependencies:
-      '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.0)
+      '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.1)
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   '@csstools/postcss-light-dark-function@2.0.9(postcss@8.5.10)':
     dependencies:
@@ -20011,7 +20002,7 @@ snapshots:
   '@csstools/postcss-scope-pseudo-class@4.0.1(postcss@8.5.10)':
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   '@csstools/postcss-sign-functions@1.1.4(postcss@8.5.10)':
     dependencies:
@@ -20044,13 +20035,13 @@ snapshots:
     dependencies:
       postcss: 8.5.10
 
-  '@csstools/selector-resolve-nested@3.1.0(postcss-selector-parser@7.1.0)':
+  '@csstools/selector-resolve-nested@3.1.0(postcss-selector-parser@7.1.1)':
     dependencies:
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
-  '@csstools/selector-specificity@5.0.0(postcss-selector-parser@7.1.0)':
+  '@csstools/selector-specificity@5.0.0(postcss-selector-parser@7.1.1)':
     dependencies:
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   '@csstools/utilities@2.0.0(postcss@8.5.10)':
     dependencies:
@@ -25083,11 +25074,8 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tailwindcss/typography@0.5.16(tailwindcss@3.4.1)':
+  '@tailwindcss/typography@0.5.19(tailwindcss@3.4.1)':
     dependencies:
-      lodash.castarray: 4.4.0
-      lodash.isplainobject: 4.0.6
-      lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
       tailwindcss: 3.4.1
 
@@ -26271,7 +26259,7 @@ snapshots:
 
   babel-plugin-macros@3.1.0:
     dependencies:
-      '@babel/runtime': 7.29.2
+      '@babel/runtime': 7.28.4
       cosmiconfig: 7.1.0
       resolve: 1.22.10
 
@@ -27202,7 +27190,7 @@ snapshots:
   css-blank-pseudo@7.0.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   css-color-keywords@1.0.0: {}
 
@@ -27212,9 +27200,9 @@ snapshots:
 
   css-has-pseudo@7.0.2(postcss@8.5.10):
     dependencies:
-      '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.0)
+      '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.1)
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
 
   css-in-js-utils@3.1.0:
@@ -30435,15 +30423,9 @@ snapshots:
     dependencies:
       p-locate: 6.0.0
 
-  lodash.castarray@4.4.0: {}
-
   lodash.debounce@4.0.8: {}
 
-  lodash.isplainobject@4.0.6: {}
-
   lodash.memoize@4.1.2: {}
-
-  lodash.merge@4.6.2: {}
 
   lodash.sortby@4.7.0: {}
 
@@ -32861,7 +32843,7 @@ snapshots:
   postcss-attribute-case-insensitive@7.0.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-calc@9.0.1(postcss@8.5.10):
     dependencies:
@@ -32932,12 +32914,12 @@ snapshots:
       '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
       '@csstools/css-tokenizer': 3.0.4
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-dir-pseudo-class@9.0.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-discard-comments@6.0.2(postcss@8.5.10):
     dependencies:
@@ -32970,12 +32952,12 @@ snapshots:
   postcss-focus-visible@10.0.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-focus-within@9.0.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-font-variant@5.0.0(postcss@8.5.10):
     dependencies:
@@ -33086,13 +33068,13 @@ snapshots:
     dependencies:
       icss-utils: 5.1.0(postcss@8.5.10)
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
 
   postcss-modules-scope@3.2.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-modules-values@4.0.0(postcss@8.5.10):
     dependencies:
@@ -33106,10 +33088,10 @@ snapshots:
 
   postcss-nesting@13.0.1(postcss@8.5.10):
     dependencies:
-      '@csstools/selector-resolve-nested': 3.1.0(postcss-selector-parser@7.1.0)
-      '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.0)
+      '@csstools/selector-resolve-nested': 3.1.0(postcss-selector-parser@7.1.1)
+      '@csstools/selector-specificity': 5.0.0(postcss-selector-parser@7.1.1)
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-normalize-charset@6.0.2(postcss@8.5.10):
     dependencies:
@@ -33251,7 +33233,7 @@ snapshots:
   postcss-pseudo-class-any-link@10.0.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-reduce-idents@6.0.3(postcss@8.5.10):
     dependencies:
@@ -33276,7 +33258,7 @@ snapshots:
   postcss-selector-not@8.0.1(postcss@8.5.10):
     dependencies:
       postcss: 8.5.10
-      postcss-selector-parser: 7.1.0
+      postcss-selector-parser: 7.1.1
 
   postcss-selector-parser@6.0.10:
     dependencies:
@@ -33288,7 +33270,7 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss-selector-parser@7.1.0:
+  postcss-selector-parser@7.1.1:
     dependencies:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
