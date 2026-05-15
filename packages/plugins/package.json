@@ -1,11 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@karakeep/plugins",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "exports": {
     "./queue-liteque": "./queue-liteque/index.ts",
+    "./queue-postgres": "./queue-postgres/index.ts",
     "./queue-restate": "./queue-restate/index.ts",
     "./ratelimit-memory": "./ratelimit-memory/index.ts",
     "./ratelimit-redis": "./ratelimit-redis/index.ts",
@@ -21,12 +22,13 @@
   },
   "dependencies": {
     "@karakeep/shared": "workspace:*",
-    "@restatedev/restate-sdk": "^1.10.3",
-    "@restatedev/restate-sdk-clients": "^1.10.3",
+    "@restatedev/restate-sdk": "^1.14.3",
+    "@restatedev/restate-sdk-clients": "^1.14.3",
     "async-mutex": "^0.4.1",
     "liteque": "^0.8.0",
     "meilisearch": "^0.45.0",
-    "redis": "^5.11.0"
+    "postgres": "^3.4.9",
+    "redis": "^5.12.1"
   },
   "devDependencies": {
     "@karakeep/tsconfig": "workspace:^0.1.0",

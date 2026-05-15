@@ -1,26 +1,26 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "@karakeep/shared",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1014.0",
-    "glob": "11.1.0",
+    "@aws-sdk/client-s3": "^3.1047.0",
+    "glob": "13.0.6",
     "html-to-text": "^9.0.5",
-    "js-tiktoken": "^1.0.20",
-    "nodemailer": "8.0.5",
-    "ollama": "^0.5.14",
-    "openai": "^6.34.0",
+    "js-tiktoken": "^1.0.21",
+    "nodemailer": "8.0.7",
+    "ollama": "^0.5.18",
+    "openai": "^6.37.0",
     "typescript-parsec": "^0.3.4",
-    "undici": "6.24.0",
-    "winston": "^3.11.0",
-    "zod": "^4.0.0"
+    "undici": "6.25.0",
+    "winston": "^3.19.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@karakeep/tsconfig": "workspace:^0.1.0",
     "@types/html-to-text": "^9.0.4",
-    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer": "^6.4.23",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^3.2.4"
   },
