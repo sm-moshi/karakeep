@@ -16,10 +16,10 @@
   "devDependencies": {
     "@karakeep/tsconfig": "workspace:^0.1.0",
     "@tsconfig/node22": "^22.0.0",
-    "@types/turndown": "^5.0.5",
+    "@types/turndown": "^5.0.6",
     "shx": "^0.4.0",
-    "tsx": "^4.8.1",
-    "vite": "7.3.2",
+    "tsx": "^4.21.0",
+    "vite": "7.3.3",
     "vite-tsconfig-paths": "^6.1.1"
   },
   "scripts": {
@@ -39,7 +39,7 @@
   "dependencies": {
     "@karakeep/sdk": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "turndown": "^7.2.0",
-    "zod": "^4.0.0"
+    "turndown": "^7.2.4",
+    "zod": "^4.4.3"
   }
 }
