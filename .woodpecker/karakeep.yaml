@@ -13,17 +13,15 @@ steps:
       - event: pull_request
       - event: push
         branch: main
-    image: harbor.m0sh1.cc/apps/karakeep-node-ci:24.15.0-debian13-dev@sha256:ce9fe41dd8a63326e5c5894dea7f55b71919ec4b3a945d47753487c814bcc65a
-    volumes:
-      - woodpecker-pipeline-cache:/woodpecker/cache
+    image: harbor.m0sh1.cc/apps/karakeep-node-ci-deps:ed310d1b@sha256:3b112e55dedc6b021dc8be1dfa25d6f77d95c981c0ee003f1fdc82901c3b3c8a
     environment:
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
-      PNPM_STORE_DIR: /woodpecker/cache/karakeep/pnpm-store
+      PNPM_STORE_DIR: /pnpm/store
       TURBO_CACHE_DIR: /woodpecker/cache/karakeep/turbo
     commands:
-      - mkdir -p "$PNPM_STORE_DIR" "$TURBO_CACHE_DIR"
+      - mkdir -p "$TURBO_CACHE_DIR"
       - pnpm config set store-dir "$PNPM_STORE_DIR"
-      - pnpm install --frozen-lockfile --prefer-offline
+      - pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
       - pnpm preflight
 
   - name: build-and-push-ghcr
