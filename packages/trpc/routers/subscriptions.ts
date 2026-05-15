@@ -24,6 +24,8 @@ const stripe = serverConfig.stripe.secretKey
     })
   : null;
 
+type StripeEvent = ReturnType<Stripe["webhooks"]["constructEvent"]>;
+
 function requireStripeConfig() {
   if (!stripe || !serverConfig.stripe.priceId) {
     throw new TRPCError({
@@ -40,7 +42,7 @@ function requireStripeConfig() {
 
 // Taken from https://github.com/t3dotgg/stripe-recommendations
 
-const allowedEvents: Stripe.Event.Type[] = [
+const allowedEvents: StripeEvent["type"][] = [
   "checkout.session.completed",
   "customer.subscription.created",
   "customer.subscription.updated",
@@ -253,7 +255,7 @@ async function syncStripeDataToDatabase(customerId: string, db: Context["db"]) {
   });
 }
 
-async function processEvent(event: Stripe.Event, db: Context["db"]) {
+async function processEvent(event: StripeEvent, db: Context["db"]) {
   if (!allowedEvents.includes(event.type)) {
     return;
   }
@@ -416,8 +418,9 @@ export const subscriptionsRouter = router({
         }
       }
 
-      // @ts-expect-error managed_payments is a Stripe preview feature not yet in the SDK types
-      const session = await stripe.checkout.sessions.create({
+      const sessionParams: Stripe.Checkout.SessionCreateParams & {
+        managed_payments?: { enabled: boolean };
+      } = {
         customer: customerId,
         line_items: [
           {
@@ -438,7 +441,9 @@ export const subscriptionsRouter = router({
         managed_payments: {
           enabled: true,
         },
-      });
+      };
+
+      const session = await stripe.checkout.sessions.create(sessionParams);
 
       return {
         sessionId: session.id,
@@ -544,7 +549,7 @@ export const subscriptionsRouter = router({
         });
       }
 
-      let event: Stripe.Event;
+      let event: StripeEvent;
 
       try {
         event = stripe.webhooks.constructEvent(
