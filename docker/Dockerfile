@@ -73,7 +73,7 @@ RUN (cd apps/cli && /app/node_modules/.bin/vite build && chmod +x dist/index.mjs
 # Build the mcp server
 RUN (cd apps/mcp && /app/node_modules/.bin/vite build && /app/node_modules/.bin/shx chmod +x dist/index.js)
 
-RUN pnpm --offline deploy --legacy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers
+RUN pnpm --prefer-offline deploy --legacy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers
 
 ################# The All-in-one builder ##############
 
