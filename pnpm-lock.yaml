@@ -226,7 +226,7 @@ importers:
         version: 11.9.0(typescript@5.9.3)
       '@tsconfig/node22':
         specifier: ^22.0.0
-        version: 22.0.2
+        version: 22.0.5
       chalk:
         specifier: ^5.3.0
         version: 5.4.1
@@ -342,7 +342,7 @@ importers:
         version: link:../../tooling/typescript
       '@tsconfig/node22':
         specifier: ^22.0.0
-        version: 22.0.2
+        version: 22.0.5
       '@types/turndown':
         specifier: ^5.0.5
         version: 5.0.5
@@ -914,7 +914,7 @@ importers:
         version: 0.6.0
       '@tsconfig/node22':
         specifier: ^22.0.0
-        version: 22.0.2
+        version: 22.0.5
       archiver:
         specifier: ^7.0.1
         version: 7.0.1
@@ -1358,7 +1358,7 @@ importers:
         version: link:../../tooling/typescript
       '@tsconfig/node22':
         specifier: ^22.0.0
-        version: 22.0.2
+        version: 22.0.5
       openapi-typescript:
         specifier: ^7.6.1
         version: 7.8.0(typescript@5.9.3)
@@ -1647,7 +1647,7 @@ importers:
     devDependencies:
       '@tsconfig/node22':
         specifier: ^22.0.0
-        version: 22.0.2
+        version: 22.0.5
 
   tools/compare-models:
     dependencies:
@@ -7304,8 +7304,8 @@ packages:
       react-dom: '>=18.2.0'
       typescript: '>=5.7.2'
 
-  '@tsconfig/node22@22.0.2':
-    resolution: {integrity: sha512-Kmwj4u8sDRDrMYRoN9FDEcXD8UpBSaPQQ24Gz+Gamqfm7xxn+GBR7ge/Z7pK8OXNGyUzbSwJj+TH6B+DS/epyA==}
+  '@tsconfig/node22@22.0.5':
+    resolution: {integrity: sha512-hLf2ld+sYN/BtOJjHUWOk568dvjFQkHnLNa6zce25GIH+vxKfvTgm3qpaH6ToF5tu/NN0IH66s+Bb5wElHrLcw==}
 
   '@turbo/darwin-64@2.9.12':
     resolution: {integrity: sha512-eu3eFRmE9NjgZ0wPdRJ44l+LGSeIky+tz5ZQd8zQkw/Yqi+BM7wq+8nbabeoiVUcICi/IZweMOKl/MCmkrd1+g==}
@@ -25157,7 +25157,7 @@ snapshots:
       react-dom: 19.2.3(react@19.2.3)
       typescript: 5.9.3
 
-  '@tsconfig/node22@22.0.2': {}
+  '@tsconfig/node22@22.0.5': {}
 
   '@turbo/darwin-64@2.9.12':
     optional: true
