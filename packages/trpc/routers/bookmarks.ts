@@ -369,9 +369,11 @@ export const bookmarksAppRouter = router({
             ...bookmark,
           };
         },
-        {
-          behavior: "immediate",
-        },
+        serverConfig.database.driver === "postgres"
+          ? undefined
+          : {
+              behavior: "immediate",
+            },
       );
 
       bookmarkCreationCounter.labels(input.source ?? "unknown").inc();

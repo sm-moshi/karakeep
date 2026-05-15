@@ -98,12 +98,14 @@ export class Tag {
 
     const countAi = sql<number>`
       SUM(CASE WHEN ${tagsOnBookmarks.attachedBy} = 'ai' THEN 1 ELSE 0 END)
-    `;
+    `.mapWith(Number);
     const countHuman = sql<number>`
       SUM(CASE WHEN ${tagsOnBookmarks.attachedBy} = 'human' THEN 1 ELSE 0 END)
-    `;
+    `.mapWith(Number);
     // Count only matched right rows; will be 0 when there are none
-    const countAny = sql<number>`COUNT(${tagsOnBookmarks.tagId})`;
+    const countAny = sql<number>`COUNT(${tagsOnBookmarks.tagId})`.mapWith(
+      Number,
+    );
     let qSql = ctx.db
       .select({
         id: bookmarkTags.id,

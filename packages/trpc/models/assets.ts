@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { getMutationCount } from "@karakeep/db";
@@ -67,7 +67,7 @@ export class Asset {
         .limit(input.limit)
         .offset((page - 1) * input.limit),
       ctx.db
-        .select({ count: sql<number>`count(*)` })
+        .select({ count: count() })
         .from(assets)
         .where(eq(assets.userId, ctx.user.id)),
     ]);
