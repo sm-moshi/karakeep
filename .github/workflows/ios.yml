@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-26
     steps:
       - name: Setup repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup
         uses: ./tooling/github/setup
@@ -30,7 +30,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Upload IPA artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: karakeep-ios
           path: ${{ github.workspace }}/app-release.ipa
