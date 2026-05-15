@@ -6,6 +6,10 @@
 - kubectl
 - kustomize
 
+> Postgres/CNPG: the default manifests in `/kubernetes` remain the
+> SQLite-compatible deployment. For the Postgres-only CloudNativePG variant, see
+> [Kubernetes with CNPG/Postgres](./05-kubernetes-cnpg.md).
+
 ### 1. Get the deployment manifests
 
 You can clone the repository and copy the `/kubernetes` directory into another directory of your choice.
@@ -65,7 +69,7 @@ After that you have to configure the web service to the type ClusterIP so it is 
 
 If you have already deployed the service you can patch the web service to the type ClusterIP with the following command:
 
-` kubectl -n karakeep patch service web -p '{"spec":{"type":"ClusterIP"}}' `
+`kubectl -n karakeep patch service web -p '{"spec":{"type":"ClusterIP"}}'`
 
 Afterwards you can apply the ingress and access the service via your chosen URL.
 
@@ -75,17 +79,17 @@ To access karakeep securely you can configure the ingress to use a preconfigured
 
 After you have deployed the karakeep manifests you can deploy your certificate for karakeep in the `karakeep` namespace with this example command. You can name the secret however you want. But be aware that the secret name in the ingress definition has to match the secret name.
 
-` $ kubectl --namespace karakeep create secret tls karakeep-web-tls --cert=/path/to/crt --key=/path/to/key `
+`$ kubectl --namespace karakeep create secret tls karakeep-web-tls --cert=/path/to/crt --key=/path/to/key`
 
 If the secret is successfully created you can now configure the Ingress to use TLS via this changes to the spec:
 
-```` yaml
- spec:
+```yaml
+spec:
   tls:
-  - hosts:
-      - karakeep.example.com
-    secretName: karakeep-web-tls
-````
+    - hosts:
+        - karakeep.example.com
+      secretName: karakeep-web-tls
+```
 
 > Note: Be aware that the hosts have to match between the tls spec and the HTTP spec.
 

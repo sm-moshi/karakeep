@@ -1,0 +1,10 @@
+# Example only. Configure `spec.backup` on the Cluster before applying.
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: karakeep-postgres-daily
+spec:
+  schedule: "0 0 2 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: karakeep-postgres

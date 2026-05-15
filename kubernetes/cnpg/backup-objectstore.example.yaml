@@ -1,0 +1,22 @@
+# Example only. Do not apply without replacing the destination and secret names.
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: karakeep-postgres
+spec:
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      destinationPath: s3://example-karakeep-postgres-backups/
+      endpointURL: https://s3.example.com
+      s3Credentials:
+        accessKeyId:
+          name: karakeep-postgres-backup-credentials
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: karakeep-postgres-backup-credentials
+          key: SECRET_ACCESS_KEY
+      wal:
+        compression: gzip
+      data:
+        compression: gzip

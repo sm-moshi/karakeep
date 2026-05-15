@@ -1,0 +1,13 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: karakeep-postgres
+spec:
+  # Use 1 instance for local/dev clusters.
+  instances: 3
+  bootstrap:
+    initdb:
+      database: karakeep
+      owner: karakeep
+  storage:
+    size: 20Gi
