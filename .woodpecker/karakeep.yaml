@@ -1,15 +1,37 @@
 # Karakeep fork image.
-# Pushes the all-in-one runtime to: ghcr.io/sm-moshi/karakeep
+# Pushes the Postgres-only all-in-one runtime to: ghcr.io/sm-moshi/karakeep
 when:
   - event: manual
+  - event: pull_request
   - event: push
     branch: main
 
 steps:
+  - name: preflight
+    when:
+      - event: manual
+      - event: pull_request
+      - event: push
+        branch: main
+    image: harbor.m0sh1.cc/apps/karakeep-node-ci-deps:ed310d1b@sha256:3b112e55dedc6b021dc8be1dfa25d6f77d95c981c0ee003f1fdc82901c3b3c8a
+    environment:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+      PNPM_STORE_DIR: /pnpm/store
+      TURBO_CACHE_DIR: /tmp/karakeep-turbo
+      TURBO_TELEMETRY_DISABLED: "1"
+    commands:
+      - mkdir -p /tmp/karakeep-ci "$TURBO_CACHE_DIR"
+      - tar --exclude=.git --exclude=node_modules --exclude=.turbo -cf - . | tar -C /tmp/karakeep-ci -xf -
+      - cd /tmp/karakeep-ci
+      - pnpm config set store-dir "$PNPM_STORE_DIR"
+      - pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
+      - pnpm exec turbo run --no-daemon --concurrency=2 typecheck lint format
+
   - name: build-and-push-ghcr
     when:
       - event: manual
       - event: push
+        branch: main
     image: woodpeckerci/plugin-docker-buildx:6.1.0@sha256:33263f74a593ddef5d4faeb39ae9f87db14d64d8aae8186284ae6e90d89298a4
     privileged: true
     settings:
@@ -17,7 +39,7 @@ steps:
       repo: ghcr.io/sm-moshi/karakeep
       dockerfile: docker/Dockerfile
       context: .
-      target: aio
+      target: aio-postgres
       tags:
         - "${CI_COMMIT_SHA:0:8}"
         - latest
@@ -35,6 +57,7 @@ steps:
     when:
       - event: manual
       - event: push
+        branch: main
     failure: ignore
     image: dhi.io/trivy:0.70.0-alpine3.23-dev@sha256:18f9194e75e1ba136f9415fffa3246187aca13698a52ab5baf188ec6d3813666
     environment:
@@ -47,6 +70,7 @@ steps:
     when:
       - event: manual
       - event: push
+        branch: main
     failure: ignore
     image: dhi.io/syft:1.44.0-alpine3.23-dev@sha256:5827400e1f8401e8b925687aa38624ada774b5480153ddbe342815a68559b8ef
     environment:

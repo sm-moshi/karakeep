@@ -369,9 +369,11 @@ export const bookmarksAppRouter = router({
             ...bookmark,
           };
         },
-        {
-          behavior: "immediate",
-        },
+        serverConfig.database.driver === "postgres"
+          ? undefined
+          : {
+              behavior: "immediate",
+            },
       );
 
       bookmarkCreationCounter.labels(input.source ?? "unknown").inc();
@@ -582,8 +584,7 @@ export const bookmarksAppRouter = router({
                 eq(bookmarks.userId, ctx.user.id),
                 eq(bookmarks.id, input.bookmarkId),
               ),
-            )
-            .returning({ tagId: tagsOnBookmarks.tagId });
+            );
         }
       });
 
@@ -1051,8 +1052,7 @@ export const bookmarksAppRouter = router({
             .values(
               toAddTagNames.map((name) => ({ name, userId: ctx.user.id })),
             )
-            .onConflictDoNothing()
-            .returning({ tagId: tagsOnBookmarks.tagId });
+            .onConflictDoNothing();
         }
       }
 

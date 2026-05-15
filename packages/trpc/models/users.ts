@@ -769,7 +769,9 @@ export class User {
       // Total asset size
       this.ctx.db
         .select({
-          totalAssetSize: sql<number>`COALESCE(SUM(${assets.size}), 0)`,
+          totalAssetSize: sql<number>`COALESCE(SUM(${assets.size}), 0)`.mapWith(
+            Number,
+          ),
         })
         .from(assets)
         .where(eq(assets.userId, this.user.id)),
@@ -779,7 +781,9 @@ export class User {
         .select({
           type: assets.assetType,
           count: count(),
-          totalSize: sql<number>`COALESCE(SUM(${assets.size}), 0)`,
+          totalSize: sql<number>`COALESCE(SUM(${assets.size}), 0)`.mapWith(
+            Number,
+          ),
         })
         .from(assets)
         .where(eq(assets.userId, this.user.id))

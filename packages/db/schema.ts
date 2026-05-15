@@ -1,1 +1,64 @@
-export * from "./schema.sqlite";
+import * as pgSchema from "./schema.pg";
+import * as sqliteSchema from "./schema.sqlite";
+
+export { AssetTypes } from "./schema.sqlite";
+
+const selectedSchema = (process.env.DB_DRIVER === "postgres"
+  ? pgSchema
+  : sqliteSchema) as unknown as typeof sqliteSchema;
+
+export const {
+  users,
+  accounts,
+  sessions,
+  verificationTokens,
+  passwordResetTokens,
+  apiKeys,
+  bookmarks,
+  bookmarkLinks,
+  assets,
+  highlights,
+  userReadingProgress,
+  bookmarkTexts,
+  bookmarkAssets,
+  bookmarkTags,
+  tagsOnBookmarks,
+  bookmarkLists,
+  bookmarksInLists,
+  listCollaborators,
+  listInvitations,
+  customPrompts,
+  rssFeedsTable,
+  webhooksTable,
+  rssFeedImportsTable,
+  backupsTable,
+  config,
+  ruleEngineRulesTable,
+  ruleEngineActionsTable,
+  invites,
+  subscriptions,
+  importSessions,
+  importSessionBookmarks,
+  importStagingBookmarks,
+  userRelations,
+  bookmarkRelations,
+  assetRelations,
+  bookmarkTagsRelations,
+  tagsOnBookmarksRelations,
+  apiKeyRelations,
+  bookmarkListsRelations,
+  bookmarksInListsRelations,
+  listCollaboratorsRelations,
+  listInvitationsRelations,
+  webhooksRelations,
+  ruleEngineRulesRelations,
+  ruleEngineActionsTableRelations,
+  rssFeedImportsTableRelations,
+  invitesRelations,
+  subscriptionsRelations,
+  passwordResetTokensRelations,
+  importSessionsRelations,
+  importSessionBookmarksRelations,
+  backupsRelations,
+  userReadingProgressRelations,
+} = selectedSchema;

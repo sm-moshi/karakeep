@@ -24,6 +24,9 @@ const stripe = serverConfig.stripe.secretKey
     })
   : null;
 
+type StripeClient = NonNullable<typeof stripe>;
+type StripeEvent = ReturnType<StripeClient["webhooks"]["constructEvent"]>;
+
 function requireStripeConfig() {
   if (!stripe || !serverConfig.stripe.priceId) {
     throw new TRPCError({
@@ -40,7 +43,7 @@ function requireStripeConfig() {
 
 // Taken from https://github.com/t3dotgg/stripe-recommendations
 
-const allowedEvents: Stripe.Event.Type[] = [
+const allowedEvents: StripeEvent["type"][] = [
   "checkout.session.completed",
   "customer.subscription.created",
   "customer.subscription.updated",
@@ -253,7 +256,7 @@ async function syncStripeDataToDatabase(customerId: string, db: Context["db"]) {
   });
 }
 
-async function processEvent(event: Stripe.Event, db: Context["db"]) {
+async function processEvent(event: StripeEvent, db: Context["db"]) {
   if (!allowedEvents.includes(event.type)) {
     return;
   }
@@ -416,8 +419,7 @@ export const subscriptionsRouter = router({
         }
       }
 
-      // @ts-expect-error managed_payments is a Stripe preview feature not yet in the SDK types
-      const session = await stripe.checkout.sessions.create({
+      const sessionParams = {
         customer: customerId,
         line_items: [
           {
@@ -425,20 +427,22 @@ export const subscriptionsRouter = router({
             quantity: 1,
           },
         ],
-        mode: "subscription",
+        mode: "subscription" as const,
         success_url: `${serverConfig.publicUrl}/settings/subscription?success=true`,
         cancel_url: `${serverConfig.publicUrl}/settings/subscription?canceled=true`,
         metadata: {
           userId: ctx.user.id,
         },
         customer_update: {
-          address: "auto",
+          address: "auto" as const,
         },
         allow_promotion_codes: true,
         managed_payments: {
           enabled: true,
         },
-      });
+      };
+
+      const session = await stripe.checkout.sessions.create(sessionParams);
 
       return {
         sessionId: session.id,
@@ -544,7 +548,7 @@ export const subscriptionsRouter = router({
         });
       }
 
-      let event: Stripe.Event;
+      let event: StripeEvent;
 
       try {
         event = stripe.webhooks.constructEvent(
