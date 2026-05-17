@@ -196,9 +196,9 @@ class BatchingDocumentQueue {
   }
 
   private async ensureTaskSuccess(taskUid: number): Promise<void> {
-    const task = await this.index.waitForTask(taskUid, {
-      intervalMs: 200,
-      timeOutMs: this.jobTimeoutSec * 1000 * 0.9,
+    const task = await this.index.tasks.waitForTask(taskUid, {
+      interval: 200,
+      timeout: this.jobTimeoutSec * 1000 * 0.9,
     });
     if (task.error) {
       throw new Error(`Search task failed: ${task.error.message}`);
@@ -286,9 +286,9 @@ class MeiliSearchIndexClient implements SearchIndexClient {
   }
 
   private async ensureTaskSuccess(taskUid: number): Promise<void> {
-    const task = await this.index.waitForTask(taskUid, {
-      intervalMs: 200,
-      timeOutMs: this.jobTimeoutSec * 1000 * 0.9,
+    const task = await this.index.tasks.waitForTask(taskUid, {
+      interval: 200,
+      timeout: this.jobTimeoutSec * 1000 * 0.9,
     });
     if (task.error) {
       throw new Error(`Search task failed: ${task.error.message}`);
@@ -342,7 +342,7 @@ export class MeiliSearchProvider implements PluginProvider<SearchIndexClient> {
       const idx = await this.client.createIndex(this.indexName, {
         primaryKey: "id",
       });
-      await this.client.waitForTask(idx.taskUid);
+      await this.client.tasks.waitForTask(idx.taskUid);
       indexFound = await this.client.getIndex<BookmarkSearchDocument>(
         this.indexName,
       );
@@ -376,7 +376,7 @@ export class MeiliSearchProvider implements PluginProvider<SearchIndexClient> {
       const taskId = await index.updateFilterableAttributes(
         desiredFilterableAttributes,
       );
-      await this.client!.waitForTask(taskId.taskUid);
+      await this.client!.tasks.waitForTask(taskId.taskUid);
     }
 
     if (
@@ -389,7 +389,7 @@ export class MeiliSearchProvider implements PluginProvider<SearchIndexClient> {
       const taskId = await index.updateSortableAttributes(
         desiredSortableAttributes,
       );
-      await this.client!.waitForTask(taskId.taskUid);
+      await this.client!.tasks.waitForTask(taskId.taskUid);
     }
   }
 }
