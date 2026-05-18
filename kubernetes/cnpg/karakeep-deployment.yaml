@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: karakeep
-          image: ghcr.io/sm-moshi/karakeep:postgres
+          image: ghcr.io/yaelmoshi/karakeep:postgres
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

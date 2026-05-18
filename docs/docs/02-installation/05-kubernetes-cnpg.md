@@ -46,7 +46,7 @@ Set these values before deploying:
 
 ```env
 NEXTAUTH_URL=https://karakeep.example.com
-KARAKEEP_IMAGE=ghcr.io/sm-moshi/karakeep
+KARAKEEP_IMAGE=ghcr.io/yaelmoshi/karakeep
 KARAKEEP_VERSION=postgres
 DB_DRIVER=postgres
 ```
