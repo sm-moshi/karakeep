@@ -83,7 +83,7 @@ export function MarkdownReadonly({
         pre({ ...props }) {
           return <PreWithCopyBtn {...props} />;
         },
-        code({ className, children, ...props }) {
+        code({ className, children, ref: _ref, ...props }) {
           const match = /language-(\w+)/.exec(className ?? "");
           return match ? (
             <SyntaxHighlighter

@@ -1,7 +1,26 @@
 import type * as Preset from "@docusaurus/preset-classic";
+import type { LoadContext, Plugin } from "@docusaurus/types";
 import type { Config } from "@docusaurus/types";
 import type * as OpenApiPlugin from "docusaurus-plugin-openapi-docs";
 import { themes as prismThemes } from "prism-react-renderer";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+
+function pathBrowserFallbackPlugin(_context: LoadContext): Plugin {
+  return {
+    name: "path-browser-fallback",
+    configureWebpack() {
+      return {
+        resolve: {
+          fallback: {
+            path: require.resolve("path-browserify"),
+          },
+        },
+      };
+    },
+  };
+}
 
 const config: Config = {
   title: "Karakeep Docs",
@@ -57,10 +76,7 @@ const config: Config = {
     ],
   ],
   plugins: [
-    [
-      "@docusaurus/plugin-client-redirects",
-      {},
-    ],
+    ["@docusaurus/plugin-client-redirects", {}],
     [
       "docusaurus-plugin-openapi-docs",
       {
@@ -77,6 +93,7 @@ const config: Config = {
         },
       },
     ],
+    pathBrowserFallbackPlugin,
   ],
   themes: ["docusaurus-theme-openapi-docs"],
 
