@@ -65,7 +65,7 @@ RUN cd packages/db && \
 
 # Compile the web app. Next derives its worker count from CIRCLE_NODE_TOTAL;
 # cap it here to keep local and CI Docker builds inside modest memory limits.
-RUN (cd apps/web && CIRCLE_NODE_TOTAL=2 /app/node_modules/.bin/next build --experimental-build-mode compile)
+RUN (cd apps/web && CIRCLE_NODE_TOTAL=2 /app/node_modules/.bin/next build --webpack --experimental-build-mode compile)
 
 # Build the worker code
 RUN (cd apps/workers && /app/node_modules/.bin/tsdown)
@@ -135,7 +135,7 @@ RUN cd packages/db && \
     /app/node_modules/.bin/ncc build migrate-postgres.ts -o /db_migrations && \
     cp -R drizzle-pg /db_migrations
 
-RUN (cd apps/web && CIRCLE_NODE_TOTAL=2 /app/node_modules/.bin/next build --experimental-build-mode compile)
+RUN (cd apps/web && CIRCLE_NODE_TOTAL=2 /app/node_modules/.bin/next build --webpack --experimental-build-mode compile)
 RUN (cd apps/workers && /app/node_modules/.bin/tsdown)
 RUN DEVELOPMENT_SKIP_GETTING_ASSET=1 pnpm --prefer-offline deploy --legacy --node-linker=isolated --filter @karakeep/workers --prod /prod/workers --config.allow-unused-patches=true
 
