@@ -199,7 +199,9 @@ RUN case ${TARGETARCH} in \
         "arm64")  YTDLP_FILE=yt-dlp_linux_aarch64 ;; \
         *) echo "Unsupported arch: ${TARGETARCH}" && exit 1 ;; \
     esac \
-    && curl -fsSL https://github.com/yt-dlp/yt-dlp/releases/latest/download/${YTDLP_FILE} -o /usr/local/bin/yt-dlp \
+    && curl --fail --show-error --location --retry 5 --retry-all-errors --retry-delay 3 \
+        https://github.com/yt-dlp/yt-dlp/releases/latest/download/${YTDLP_FILE} \
+        -o /usr/local/bin/yt-dlp \
     && chmod +x /usr/local/bin/yt-dlp
 
 # Copy monolith binary from builder
